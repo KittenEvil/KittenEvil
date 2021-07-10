@@ -42,19 +42,19 @@
             $("#guess").click(function () {
                 for (n = 0; n < 9; n++) {
                     setTimeout(function(n){
-                        $('.speech').eq(n).text("I see before me " + sumValues(n+1)%3);
+                        $('.speech').eq(n).text("I counted before me " + sumValues(n+1)%3);
                     }, 200+n*200, n);
                 }
                 
                 setTimeout(function(){
-                    $('.speech').eq(0).text("I see before me " + sumValues(1)%3 + 
+                    $('.speech').eq(0).text("I counted before me " + sumValues(1)%3 + 
                     "\nMy answer is " + sumValues(1)%3);
                     $('.speech').eq(0).css("background-color", ["green", "blue", "red"][sumValues(1)%3]);
                 },2200);
 
                 for (n = 1; n < 9; n++) {
                     setTimeout(function(n){
-                        $('.speech').eq(n).text("I see before me " + sumValues(n+1)%3 + 
+                        $('.speech').eq(n).text("I counted before me " + sumValues(n+1)%3 + 
                         "\nShe said " + sumValues(n)%3 + 
                         "\nMy answer is " + (3+sumValues(n)%3-sumValues(n+1)%3)%3);
                         $('.speech').eq(n).css("background-color", ["green", "blue", "red"][(3+sumValues(n)%3-sumValues(n+1)%3)%3]);
