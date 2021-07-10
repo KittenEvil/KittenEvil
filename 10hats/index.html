@@ -1,0 +1,133 @@
+<html>
+
+<head>
+    <title>Test 10 hats task</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .head {
+            width: 50px;
+        }
+
+        #heads td {
+            width: 8%;
+        }
+
+        table {
+            width: 90%
+        }
+    </style>
+    <script>
+        $(document).ready(() => {
+            $("#randomize").click(() => {
+                $('.hat').each(function () {
+                    colorIndex = Math.floor(Math.random() * 3); // get color from 0 to 2
+                    $(this).text(colorIndex);
+                    $(this).css("background-color", ["green", "blue", "red"][colorIndex]);
+                
+                $('.speech').text('');
+                $('.speech').css('background-color', 'white');
+                
+                }
+                )
+            }
+            )
+            sumValues = (j) => {
+                //function to return sum of values from j to 9
+                let sum = 0;
+                for (i = j; i <= 9; i++) {
+                    sum += parseInt($('.hat').eq(i).text());
+                }
+                return (sum);
+            }
+            $("#guess").click(function () {
+                for (n = 0; n < 9; n++) {
+                    setTimeout(function(n){
+                        $('.speech').eq(n).text("I see before me " + sumValues(n+1)%3);
+                    }, 200+n*200, n);
+                }
+                
+                setTimeout(function(){
+                    $('.speech').eq(0).text("I see before me " + sumValues(1)%3 + 
+                    "\nMy answer is " + sumValues(1)%3);
+                    $('.speech').eq(0).css("background-color", ["green", "blue", "red"][sumValues(1)%3]);
+                },2200);
+
+                for (n = 1; n < 9; n++) {
+                    setTimeout(function(n){
+                        $('.speech').eq(n).text("I see before me " + sumValues(n+1)%3 + 
+                        "\nShe said " + sumValues(n)%3 + 
+                        "\nMy answer is " + (3+sumValues(n)%3-sumValues(n+1)%3)%3);
+                        $('.speech').eq(n).css("background-color", ["green", "blue", "red"][(3+sumValues(n)%3-sumValues(n+1)%3)%3]);
+                    }, 2200+n*200, n);
+                }
+                setTimeout( function(){
+                    $('.speech').eq(9).text(
+                        "No one before me, \n" +
+                        "She said " + sumValues(9)%3 + 
+                        "\nMy answer is " + (sumValues(9)%3));
+                        $('.speech').eq(9).css("background-color", ["green", "blue", "red"][sumValues(9)%3]);
+
+                } ,4000);
+                            }
+
+            )
+        })
+    </script>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td class="hat">1</td>
+            <td class="hat">2</td>
+            <td class="hat">3</td>
+            <td class="hat">4</td>
+            <td class="hat">5</td>
+            <td class="hat">6</td>
+            <td class="hat">7</td>
+            <td class="hat">8</td>
+            <td class="hat">9</td>
+            <td class="hat">10</td>
+        </tr>
+        <tr id="heads">
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+        </tr>
+        <tr>
+            <td class="speech"></td>
+            <td class="speech"></td>
+            <td class="speech"></td>
+            <td class="speech"></td>
+            <td class="speech"></td>
+            <td class="speech"></td>
+            <td class="speech"></td>
+            <td class="speech"></td>
+            <td class="speech"></td>
+            <td class="speech"></td>
+        </tr>
+        <tr>
+            <td class="result"></td>
+            <td class="result"></td>
+            <td class="result"></td>
+            <td class="result"></td>
+            <td class="result"></td>
+            <td class="result"></td>
+            <td class="result"></td>
+            <td class="result"></td>
+            <td class="result"></td>
+            <td class="result"></td>
+        </tr>
+    </table>
+    <a href="javascript:void(0)" id="randomize">randomize colors</a><br />
+    <a href="javascript:void(0)" id="guess">start guessing</a>
+</body>
+
+</html>
