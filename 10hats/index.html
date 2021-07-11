@@ -1,0 +1,136 @@
+<html>
+
+<head>
+    <title>Test 10 hats task</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .head {
+            width: 50px;
+        }
+
+        #heads td {
+            width: 8%;
+        }
+
+        table {
+            width: 90%
+        }
+    </style>
+    <script>
+        $(document).ready(() => {
+            $("#randomize").click(() => {
+                $('.hat').each(function () {
+                    colorIndex = Math.floor(Math.random() * 3); // get color from 0 to 2
+                    $(this).text(colorIndex);
+                    $(this).css("background-color", ["green", "blue", "red"][colorIndex]);
+                
+                $('.speech').text('');
+                $('.speech').css('background-color', 'white');
+                
+                }
+                )
+            }) // end of randomize
+
+            sumValues = (j) => {
+                //function to return sum of values from j to 9
+                let sum = 0;
+                for (i = j; i <= 9; i++) {
+                    sum += parseInt($('.hat').eq(i).text());
+                }
+                return (sum);
+            }
+            // function to count sum of array
+            const sum = (arr) => {return (arr.reduce((a, b) => a + b)) };
+
+            $("#guess").click(function () {
+                // let them say what's before them
+                for (n = 0; n <= 9; n++) {
+                    setTimeout(function(n){
+                        let sees = sumValues(n+1)%3;
+                        let cell = $('.speech').eq(n);
+                        cell.text("I see before me " + sees);
+                        cell.attr('sees', sees);
+                    }, 200+n*200, n);
+                }
+                window.answers=[];
+                setTimeout(function(){
+                    // let the last in line (first to speak) give out her control sum
+                    let cell = $('.speech').eq(0);
+                    let sees = cell.attr('sees');
+                    let answer = (30-sees)%3; // how much we need to add to sees to get 0
+                    
+                    cell.html("I see before me " + sees + 
+                    "<br />My answer is " + answer);
+                    
+                    cell.css("background-color", ["green", "blue", "red"][answer]);
+                    window.answers.push(answer); // add our answer to array
+                },2200);
+
+                for (n=1; n<=9; n++) {
+                    // from 2nd to before last
+                    setTimeout(function(n){
+                        let cell = $('.speech').eq(n);
+                        let sees = cell.attr('sees');
+                        let hears = sum(window.answers);
+                        let answer = (30 - sees - hears)%3;
+                        cell.html(
+                            "I see before me " + sees +
+                            "<br />I hear after me in total " + hears + 
+                            "<br />("+hears+"%3=" + hears%3 + ")" +
+                            "<br />My answer is " + answer
+                        );
+                        window.answers.push(answer); // add our answer to array
+                        cell.css("background-color", ["green", "blue", "red"][answer]);
+                    }, 2200+n*200, n) // end of SetTimeout
+                } // end of for
+            })
+        })
+    </script>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td class="hat">1</td>
+            <td class="hat">2</td>
+            <td class="hat">3</td>
+            <td class="hat">4</td>
+            <td class="hat">5</td>
+            <td class="hat">6</td>
+            <td class="hat">7</td>
+            <td class="hat">8</td>
+            <td class="hat">9</td>
+            <td class="hat">10</td>
+        </tr>
+        <tr id="heads">
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+            <td><img src="head.svg" class="head" /></td>
+        </tr>
+        <tr>
+            <td class="speech"></td>
+            <td class="speech"></td>
+            <td class="speech"></td>
+            <td class="speech"></td>
+            <td class="speech"></td>
+            <td class="speech"></td>
+            <td class="speech"></td>
+            <td class="speech"></td>
+            <td class="speech"></td>
+            <td class="speech"></td>
+        </tr>
+
+    </table>
+    <a href="javascript:void(0)" id="randomize">randomize colors</a>
+    <br />
+    <a href="javascript:void(0)" id="guess">start guessing</a>
+</body>
+
+</html>
